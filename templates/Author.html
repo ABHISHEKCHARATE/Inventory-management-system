@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Author Page{% endblock %}
+
+{% block content %}
+<div class="main-container">
+    <div class="pd-ltr-20">
+        <h1 style="font-size: 2rem; color: #333; margin-bottom: 20px;">Authors</h1>
+        <div class="card-box pd-20 height-100-p mb-30">
+            <div class="row align-items-center">
+
+                <table style="width: 100%; border-collapse: collapse; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                    <thead style="background-color: #4CAF50; color: white; text-align: left;">
+                        <tr>
+                            <th style="padding: 10px; font-size: 1rem;">Username</th>
+                            <th style="padding: 10px; font-size: 1rem;">Email</th>
+                            <th style="padding: 10px; font-size: 1rem;">Full Name</th>
+                            <th style="padding: 10px; font-size: 1rem;">Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for author in authors %}
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 12px; text-align: left; font-size: 1rem;">{{ author.username }}</td>
+                            <td style="padding: 12px; text-align: left; font-size: 1rem;">{{ author.email }}</td>
+                            <td style="padding: 12px; text-align: left; font-size: 1rem;">{{ author.full_name }}</td>
+                            <td style="padding: 12px; text-align: left; font-size: 1rem;">{{ author.location }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" style="padding: 12px; text-align: center; color: #999;">No authors found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+

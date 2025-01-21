@@ -1,0 +1,327 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<!-- Basic Page Info -->
+		<meta charset="utf-8">
+		<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+	
+		<!-- Site favicon -->
+		<link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
+		<link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+		<link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+	
+		<!-- Mobile Specific Metas -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+		<!-- Google Font -->
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+			rel="stylesheet">
+	
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="{% static 'styles/core.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'styles/icon-font.min.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'src/plugins/jquery-steps/jquery.steps.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}">
+	
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() { dataLayer.push(arguments); }
+			gtag('js', new Date());
+
+			gtag('config', 'UA-119386393-1');
+		</script>
+	</head>
+
+	<body class="login-page">
+		<div class="login-header box-shadow">
+			<div class="container-fluid d-flex justify-content-between align-items-center">
+				<div class="brand-logo">
+					<a href="{% url 'login' %}">
+						<img src="{% static 'images/deskapp-logo.svg' %}" alt="DeskApp Logo">
+					</a>
+				</div>
+				<div class="login-menu">
+					<ul>
+						<li><a href="{% url 'login' %}">Login</a></li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+		<div class="register-page-wrap d-flex align-items-center flex-wrap justify-content-center">
+			<div class="container">
+				<div class="row align-items-center">
+					<div class="col-md-6 col-lg-7">
+						<img src="{% static 'images/register-page-img.png' %}" alt="">
+						
+					</div>
+					<div class="col-md-6 col-lg-5">
+						<div class="register-box bg-white box-shadow border-radius-10">
+							<div class="wizard-content">
+								<form class="tab-wizard2 wizard-circle wizard" id="registrationForm" method="POST" action="{% url 'register' %}"
+									style="max-width: 700px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 8px;">
+									{% csrf_token %}
+									<!-- Step 1: Account Information -->
+									<section class="form-section" id="section-1" style="display: block;">
+										<div class="form-wrap" style="max-width: 600px; margin: 0 auto;">
+											<div class="form-group row" style="margin-bottom: 15px;">
+												<label class="col-sm-4 col-form-label" style="font-weight: bold;">Email Address*</label>
+												<div class="col-sm-8">
+													<input type="email" class="form-control" name="email" required style="padding: 8px; font-size: 14px;">
+												</div>
+											</div>
+											<div class="form-group row" style="margin-bottom: 15px;">
+												<label class="col-sm-4 col-form-label" style="font-weight: bold;">Username*</label>
+												<div class="col-sm-8">
+													<input type="text" class="form-control" name="username" required style="padding: 8px; font-size: 14px;">
+												</div>
+											</div>
+											<div class="form-group row" style="margin-bottom: 15px;">
+												<label class="col-sm-4 col-form-label" style="font-weight: bold;">Password*</label>
+												<div class="col-sm-8">
+													<input type="password" class="form-control" name="password" required style="padding: 8px; font-size: 14px;">
+												</div>
+											</div>
+											<div class="form-group row" style="margin-bottom: 15px;">
+												<label class="col-sm-4 col-form-label" style="font-weight: bold;">Confirm Password*</label>
+												<div class="col-sm-8">
+													<input type="password" class="form-control" name="confirm_password" required style="padding: 8px; font-size: 14px;">
+												</div>
+											</div>
+										</div>
+										<!-- Pagination buttons for Step 1 -->
+										<div class="form-wrap" style="text-align: center; margin-top: 20px;">
+											<button type="button" class="btn btn-secondary" id="next-1"
+												style="padding: 10px 20px; background-color: #007bff; color: white;">Next</button>
+										</div>
+									</section>
+
+									<!-- Step 2: Personal Information -->
+									<section class="form-section" id="section-2" style="display: none;">
+										<div class="form-wrap" style="max-width: 600px; margin: 0 auto;">
+											<div class="form-group row" style="margin-bottom: 15px;">
+												<label class="col-sm-4 col-form-label" style="font-weight: bold;">Full Name*</label>
+												<div class="col-sm-8">
+													<input type="text" class="form-control" name="full_name" required style="padding: 8px; font-size: 14px;">
+												</div>
+											</div>
+											<div class="form-group row align-items-center" style="margin-bottom: 15px;">
+												<label class="col-sm-4 col-form-label" style="font-weight: bold;">Role*</label>
+												<div class="col-sm-8">
+													<select class="form-control" id="role" name="role" style="font-size: 14px;">
+														<option value="Author">Author</option>
+														<option value="Seller">Seller</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group row" style="margin-bottom: 15px;">
+												<label class="col-sm-4 col-form-label" style="font-weight: bold;">City</label>
+												<div class="col-sm-8">
+													<input type="text" class="form-control" name="city" required style="padding: 8px; font-size: 14px;">
+												</div>
+											</div>
+											<div class="form-group row" style="margin-bottom: 15px;">
+												<label class="col-sm-4 col-form-label" style="font-weight: bold;">BIRTHDATE</label>
+												<div class="col-sm-8">
+													<input type="date" class="form-control" name="date_of_birth" required style="padding: 8px; font-size: 14px;">
+												</div>
+											</div>
+
+											<div class="form-group row" style="margin-bottom: 15px;">
+												<label class="col-sm-4 col-form-label" style="font-weight: bold;">State</label>
+												<div class="col-sm-8">
+													<input type="text" class="form-control" name="state" required style="padding: 8px; font-size: 14px;">
+												</div>
+											</div>
+										</div>
+										<!-- Pagination buttons for Step 2 -->
+										<div class="form-wrap" style="text-align: center; margin-top: 20px;">
+											<button type="button" class="btn btn-secondary" id="previous-2"
+												style="padding: 10px 20px; background-color: #007bff; color: white;">Previous</button>
+											<button type="button" class="btn btn-secondary" id="next-2"
+												style="padding: 10px 20px; background-color: #007bff; color: white;">Next</button>
+										</div>
+									</section>
+
+									<!-- Step 3: Overview Information -->
+									<section class="form-section" id="section-3" style="display: none;">
+										<div class="form-wrap" style="max-width: 600px; margin: 0 auto;">
+											<ul class="register-info" style="list-style-type: none; padding: 0;">
+												<li style="margin-bottom: 15px;">
+													<div class="row">
+														<div class="col-sm-4" style="font-weight: bold;">Email Address</div>
+														<div class="col-sm-8">example@abc.com</div>
+													</div>
+												</li>
+												<li style="margin-bottom: 15px;">
+													<div class="row">
+														<div class="col-sm-4" style="font-weight: bold;">Username</div>
+														<div class="col-sm-8">Example</div>
+													</div>
+												</li>
+												<li style="margin-bottom: 15px;">
+													<div class="row">
+														<div class="col-sm-4" style="font-weight: bold;">Password</div>
+														<div class="col-sm-8">.....000</div>
+													</div>
+												</li>
+												<li style="margin-bottom: 15px;">
+													<div class="row">
+														<div class="col-sm-4" style="font-weight: bold;">Full Name</div>
+														<div class="col-sm-8">John Smith</div>
+													</div>
+												</li>
+												<li style="margin-bottom: 15px;">
+													<div class="row">
+														<div class="col-sm-4" style="font-weight: bold;">Location</div>
+														<div class="col-sm-8">123 Example</div>
+													</div>
+												</li>
+											</ul>
+											<div class="custom-control custom-checkbox mt-4">
+												<input type="checkbox" class="custom-control-input" id="customCheck1" required>
+												<label class="custom-control-label" for="customCheck1" style="font-size: 14px;">I have read and agreed
+													to the terms of services and privacy policy</label>
+											</div>
+										</div>
+										<!-- Pagination buttons for Step 3 -->
+										<div class="form-wrap" style="text-align: center; margin-top: 20px;">
+											<button type="button" class="btn btn-secondary" id="previous-3"
+												style="padding: 10px 20px; background-color: #007bff; color: white;">Previous</button>
+											<button type="submit" class="btn btn-primary"
+												style="padding: 10px 20px; background-color: #28a745; color: white;">Submit</button>
+										</div>
+									</section>
+								<script>
+									document.addEventListener("DOMContentLoaded", function () {
+										// Step 1: Show next section
+										document.getElementById("next-1").addEventListener("click", function () {
+											document.getElementById("section-1").style.display = "none";
+											document.getElementById("section-2").style.display = "block";
+										});
+
+										// Step 2: Show previous and next sections
+										document.getElementById("previous-2").addEventListener("click", function () {
+											document.getElementById("section-2").style.display = "none";
+											document.getElementById("section-1").style.display = "block";
+										});
+
+										document.getElementById("next-2").addEventListener("click", function () {
+											document.getElementById("section-2").style.display = "none";
+											document.getElementById("section-3").style.display = "block";
+
+											// Populate overview section with user input
+											document.querySelector("#section-3 .register-info").innerHTML = `
+												<li style="margin-bottom: 15px;">
+													<div class="row">
+														<div class="col-sm-4" style="font-weight: bold;">Email Address</div>
+														<div class="col-sm-8">${document.querySelector("input[name='email']").value}</div>
+													</div>
+												</li>
+												<li style="margin-bottom: 15px;">
+													<div class="row">
+														<div class="col-sm-4" style="font-weight: bold;">Username</div>
+														<div class="col-sm-8">${document.querySelector("input[name='username']").value}</div>
+													</div>
+												</li>
+												<li style="margin-bottom: 15px;">
+													<div class="row">
+														<div class="col-sm-4" style="font-weight: bold;">Password</div>
+														<div class="col-sm-8">.....${document.querySelector("input[name='password']").value.slice(-3)}</div>
+													</div>
+												</li>
+												<li style="margin-bottom: 15px;">
+													<div class="row">
+														<div class="col-sm-4" style="font-weight: bold;">Full Name</div>
+														<div class="col-sm-8">${document.querySelector("input[name='full_name']").value}</div>
+													</div>
+												</li>
+												<li style="margin-bottom: 15px;">
+													<div class="row">
+														<div class="col-sm-4" style="font-weight: bold;">Location</div>
+														<div class="col-sm-8">${document.querySelector("input[name='city']").value}, ${document.querySelector("input[name='state']").value}</div>
+													</div>
+												</li>
+											`;
+										});
+
+										// Step 3: Show previous section and submit form
+										document.getElementById("previous-3").addEventListener("click", function () {
+											document.getElementById("section-3").style.display = "none";
+											document.getElementById("section-2").style.display = "block";
+										});
+									});
+								</script>
+								</form>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- success Popup html Start -->
+		<!-- success Popup html Start -->
+		<button type="button" id="success-modal-btn" hidden data-toggle="modal" data-target="#success-modal"
+			data-backdrop="static">Launch modal</button>
+		<div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered max-width-400" role="document">
+				<div class="modal-content">
+					<div class="modal-body text-center font-18">
+						<h3 class="mb-20">Form Submitted!</h3>
+						<div class="mb-30 text-center">
+							<img src="{% static 'images/success.png' %}" alt="Success">
+						</div>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.
+					</div>
+					<div class="modal-footer justify-content-center">
+						<a href="{% url 'login' %}" class="btn btn-primary">Done</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- success Popup html End -->
+		<!-- js -->
+
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				// Step 1: Show next section
+				document.getElementById("next-1").addEventListener("click", function () {
+					document.getElementById("section-1").style.display = "none";
+					document.getElementById("section-2").style.display = "block";
+				});
+
+				// Step 2: Show previous and next sections
+				document.getElementById("previous-2").addEventListener("click", function () {
+					document.getElementById("section-2").style.display = "none";
+					document.getElementById("section-1").style.display = "block";
+				});
+
+				document.getElementById("next-2").addEventListener("click", function () {
+					document.getElementById("section-2").style.display = "none";
+					document.getElementById("section-3").style.display = "block";
+				});
+
+				// Step 3: Show previous section and submit form
+				document.getElementById("previous-3").addEventListener("click", function () {
+					document.getElementById("section-3").style.display = "none";
+					document.getElementById("section-2").style.display = "block";
+				});
+			});
+		</script>	
+		<script src="{% static 'scripts/core.js' %}"></script>
+		<script src="{% static 'scripts/script.min.js' %}"></script>
+		<script src="{% static 'scripts/process.js' %}"></script>
+		<script src="{% static 'scripts/layout-settings.js' %}"></script>
+		<script src="{% static 'src/plugins/jquery-steps/jquery.steps.js' %}"></script>
+		<script src="{% static 'scripts/steps-setting.js' %}"></script>
+
+	</body>
+
+</html>

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+<div class="main-container" style="font-family: 'Roboto', sans-serif; background-color: #f4f7fc; padding: 40px;">
+    <div class="container" style="max-width: 900px; margin: 0 auto;">
+
+        <div class="card"
+            style="background-color: #fff; border-radius: 12px; padding: 40px; box-shadow: 0 8px 24px rgba(0,0,0,0.1);">
+            <div class="profile-header" style="text-align: center; margin-bottom: 30px;">
+                <h2 style="color: #333; font-size: 2rem; font-weight: 600;">Welcome, {{ user.username }}</h2>
+                <p style="color: #777; font-size: 1.1rem;">Here is your profile information</p>
+            </div>
+
+            <div class="profile-info" style="margin-top: 30px;">
+                <!-- Profile Details -->
+                <div style="display: flex; justify-content: center; flex-direction: column;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr
+                                style="background-color: #4CAF50; color: white; text-align: left; height: 50px; font-size: 1.2rem;">
+                                <th style="padding: 12px; font-weight: 600;">Username</th>
+                                <th style="padding: 12px; font-weight: 600;">Email</th>
+                                <th style="padding: 12px; font-weight: 600;">Full Name</th>
+                                <th style="padding: 12px; font-weight: 600;">BIRTH DATE</th>
+                                <th style="padding: 12px; font-weight: 600;">Age</th>
+
+                                <th style="padding: 12px; font-weight: 600;">Role</th>
+                                <th style="padding: 12px; font-weight: 600;">Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background-color: #f9f9f9; border-bottom: 1px solid #ddd; font-size: 1rem;">
+                                <td style="padding: 12px; color: #555;">{{ user.username }}</td>
+                                <td style="padding: 12px; color: #555;">{{ user.email }}</td>
+                                <td style="padding: 12px; color: #555;">{{ user.full_name }}</td>
+                                <td style="padding: 12px; color: #555;">{{ user.date_of_birth }}</td>
+                                <td style="padding: 12px; color: #555;">{{ user.age}}</td>
+                                <td style="padding: 12px; color: #555;">{{ user.get_role_display }}</td>
+                                <td style="padding: 12px; color: #555;">{{ user.location }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="text-align: center; margin-top: 30px;">
+                    <button onclick="showMessage()"
+                        style="padding: 12px 25px; font-size: 1rem; background-color: #007BFF; color: white; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s;">
+                        Update Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Simple JavaScript function to show a message when the button is clicked
+    function showMessage() {
+        alert("This is where you can update your profile!");
+    }
+</script>
+
+{% endblock %}

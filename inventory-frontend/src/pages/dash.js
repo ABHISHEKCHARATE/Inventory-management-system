@@ -52,6 +52,9 @@ const Dash = () => {
                     low_stock_items: data.low_stock_items || 0,
                     total_stock_value: data.total_stock_value || 0,
                 });
+
+                // Check if data is correct
+                console.log("Fetched inventory stats:", data);
             } catch (error) {
                 console.error('Error fetching dashboard stats:', error);
                 setError('Error connecting to the server. Please try again later.');
@@ -61,7 +64,7 @@ const Dash = () => {
         };
 
         fetchDashboardStats();
-    }, []);
+    }, []); // Remove duplicate useEffect call
 
     // Bar Chart Data
     const barData = {

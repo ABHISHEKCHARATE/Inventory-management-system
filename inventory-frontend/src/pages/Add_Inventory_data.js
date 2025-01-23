@@ -87,10 +87,11 @@ const AddInventoryData = () => {
     };
 
     // Helper function to trigger stock alert API
+    // Helper function to trigger stock alert API
     const triggerStockAlert = async (authToken) => {
         try {
             const alertResponse = await fetch('http://127.0.0.1:8000/api/stock-alert/', {
-                method: 'POST', // Adjust to POST if the API needs it; change back to GET if required
+                method: 'GET', // Change method to GET
                 headers: {
                     Authorization: `Bearer ${authToken}`,
                 },
@@ -110,6 +111,7 @@ const AddInventoryData = () => {
             setError('Error connecting to the stock alert API.');
         }
     };
+
 
 
 

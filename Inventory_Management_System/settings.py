@@ -199,7 +199,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'charateabhishek3@gmail.com')
-EMAIL_HOST_PASSWORD = 'qcol hnrs rgyd fleq'
+EMAIL_HOST_PASSWORD = 'lzac uczu jevs cyvk'
 
 INSTALLED_APPS = [
     'django.contrib.admin',

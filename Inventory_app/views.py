@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import InventoryItem
 
-from django.db.models import F 
+from django.db.models import F, Count , Sum
 
 
 
@@ -171,46 +171,51 @@ class DeleteInventoryItemView(APIView):
 
 
 
-
 class StockAlertView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         """Send stock alert emails for items below the threshold."""
         user = request.user
-        
-        low_stock_items = InventoryItem.objects.filter(user=user, quantity__lt=F('threshold'))
+        queryset = InventoryItem.objects.all() if user.is_staff else InventoryItem.objects.filter(user=user)
 
-        if not low_stock_items.exists():
+        items = queryset.values("id", "name", "sku", "quantity", "threshold")
+        
+        # Calculate low stock items manually
+        low_stock_items = [item for item in items if item["quantity"] < item["threshold"]]
+
+        if not low_stock_items:
             return Response({"message": "All inventory levels are sufficient."})
 
         for item in low_stock_items:
-            
-            subject = f"Stock Alert: {item.name}"
+            print(f"Preparing email for item: {item['name']} (SKU: {item['sku']})")
+            subject = f"Stock Alert: {item['name']}"
             message = (
                 f"Dear {user.username},\n\n"
-                f"The stock for '{item.name}' (SKU: {item.sku}) is below the defined threshold.\n"
-                f"Current quantity: {item.quantity}\n"
-                f"Threshold: {item.threshold}\n\n"
+                f"The stock for '{item['name']}' (SKU: {item['sku']}) is below the defined threshold.\n"
+                f"Current quantity: {item['quantity']}\n"
+                f"Threshold: {item['threshold']}\n\n"
                 f"Please restock as soon as possible.\n"
             )
             recipient_list = [user.email]
 
-            send_mail(
-                subject,
-                message,
-                settings.EMAIL_HOST_USER,
-                recipient_list,
-                fail_silently=False,
-            )
+            try:
+                send_mail(
+                    subject,
+                    message,
+                    settings.EMAIL_HOST_USER,
+                    recipient_list,
+                    fail_silently=False,
+                )
+                print(f"Email sent to {user.email} for item: {item['name']}")
+            except Exception as e:
+                print(f"Failed to send email: {e}")
 
         return Response({
-            "message": f"Alert emails sent for {low_stock_items.count()} items.",
-            "items": [
-                {"name": item.name, "quantity": item.quantity, "threshold": item.threshold}
-                for item in low_stock_items
-            ]
+            "message": f"Alert emails sent for {len(low_stock_items)} items.",
+            "items": low_stock_items,
         })
+
 
 
 
@@ -263,28 +268,32 @@ class DownloadInventoryReportView(APIView):
         return response
 
 
-
-from django.db.models import Sum, Count, F
-from asgiref.sync import sync_to_async
-
 class DashboardAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-       
         queryset = InventoryItem.objects.all() if request.user.is_staff else InventoryItem.objects.filter(user=request.user)
+
+        # Get data into a list of dictionaries
+        items = queryset.values("id", "quantity", "threshold")
+        
+        # Calculate low stock items manually
+        low_stock_items = sum(1 for item in items if item["quantity"] < item["threshold"])
+        
+        # Total items and stock value
         total_items = queryset.aggregate(total=Count("id"))
-        low_stock_items = queryset.filter(quantity__lt=F("threshold")).count()
         total_stock_value = queryset.aggregate(stock_value=Sum(F("quantity") * F("price")))
 
-        
         data = {
             "total_items": total_items.get("total", 0),
             "low_stock_items": low_stock_items,
             "total_stock_value": total_stock_value.get("stock_value", 0),
         }
 
+        print("Returning dashboard data:", data)
+
         return Response(data)
+
 
 
 

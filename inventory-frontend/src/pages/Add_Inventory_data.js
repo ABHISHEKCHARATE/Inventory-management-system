@@ -28,81 +28,89 @@ const AddInventoryData = () => {
     };
 
     // Handle form submission
+    // Handle form submission
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess(false);
+        e.preventDefault();
+        setError('');
+        setSuccess(false);
 
-    // Ensure the inventory item is saved first
-    try {
-        const authToken = localStorage.getItem('authToken'); // Ensure auth token is present
-        if (!authToken) {
-            setError('Authentication token missing.');
-            return;
-        }
-
-        // Debugging the form data
-        console.log('Form data being submitted:', formData);
-
-        const response = await fetch('http://127.0.0.1:8000/api/inventory-items/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${authToken}`,
-            },
-            body: JSON.stringify(formData),
-        });
-
-        if (response.ok) {
-            setSuccess(true);
-            setFormData({
-                name: '',
-                sku: '',
-                quantity: '',
-                price: '',
-                supplier: '',
-                expiration_date: '',
-                threshold: 5, // Reset threshold to default
-            });
-            console.log('Inventory item saved successfully.');
-
-            // Now check if threshold is less than 5 and trigger StockAlert API
-            if (formData.threshold < 5) {
-                try {
-                    const alertResponse = await fetch('http://127.0.0.1:8000/api/stock-alert/', {
-                        method: 'GET', // Assuming the API uses GET for stock alert
-                        headers: {
-                            'Authorization': `Bearer ${authToken}`,
-                        },
-                    });
-
-                    if (alertResponse.ok) {
-                        const data = await alertResponse.json();
-                        console.log('Stock alert response:', data);
-                        setError('');
-                    } else {
-                        const data = await alertResponse.json();
-                        console.error('Error response from stock alert API:', data);
-                        setError(data.detail || 'Failed to send stock alert.');
-                    }
-                } catch (err) {
-                    console.error('Error connecting to the stock alert API:', err);
-                    setError('Error connecting to the stock alert API.');
-                }
+        try {
+            const authToken = localStorage.getItem('authToken'); // Retrieve the auth token
+            if (!authToken) {
+                setError('Authentication token missing.');
+                return;
             }
 
-            // Redirect after success (optional)
-            navigate('/dashboard');
-        } else {
-            const data = await response.json();
-            console.error('Error response data:', data);
-            setError(data.detail || 'Failed to add inventory item.');
+            // Log the form data for debugging
+            console.log('Form data being submitted:', formData);
+
+            // Submit inventory item
+            const response = await fetch('http://127.0.0.1:8000/api/inventory-items/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${authToken}`,
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                setSuccess(true);
+                setFormData({
+                    name: '',
+                    sku: '',
+                    quantity: '',
+                    price: '',
+                    supplier: '',
+                    expiration_date: '',
+                    threshold: '', // Reset threshold to default
+                });
+                console.log('Inventory item saved successfully.');
+
+                // If threshold is less than 5, trigger the stock alert API
+                if (formData.threshold < 5) {
+                    console.log('Threshold is less than 5. Triggering stock alert...');
+                    await triggerStockAlert(authToken); // Call a helper function for the stock alert
+                }
+
+                // Redirect after success (optional)
+                navigate('/dashboard');
+            } else {
+                const data = await response.json();
+                console.error('Error response data:', data);
+                setError(data.detail || 'Failed to add inventory item.');
+            }
+        } catch (err) {
+            console.error('Error connecting to the server:', err);
+            setError('Error connecting to the server.');
         }
-    } catch (err) {
-        console.error('Error connecting to the server:', err);
-        setError('Error connecting to the server.');
-    }
-};
+    };
+
+    // Helper function to trigger stock alert API
+    const triggerStockAlert = async (authToken) => {
+        try {
+            const alertResponse = await fetch('http://127.0.0.1:8000/api/stock-alert/', {
+                method: 'POST', // Adjust to POST if the API needs it; change back to GET if required
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            });
+
+            if (alertResponse.ok) {
+                const data = await alertResponse.json();
+                console.log('Stock alert triggered successfully:', data);
+                setError(''); // Clear any error messages
+            } else {
+                const data = await alertResponse.json();
+                console.error('Error response from stock alert API:', data);
+                setError(data.detail || 'Failed to send stock alert.');
+            }
+        } catch (err) {
+            console.error('Error connecting to the stock alert API:', err);
+            setError('Error connecting to the stock alert API.');
+        }
+    };
+
 
 
 

@@ -31,31 +31,47 @@ const RegistrationPage = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        setSubmissionError(null);
+        e.preventDefault(); // Prevent form's default submission behavior
+        setIsSubmitting(true); // Show a loading indicator
+        setSubmissionError(null); // Clear any previous errors
 
-        const payload = { ...formData };
+        const payload = { ...formData }; // Collect form data into the payload
 
         try {
+            // Make the API call
             const response = await fetch('http://localhost:8000/api/register/', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
+                headers: {
+                    'Content-Type': 'application/json', // Specify JSON format
+                },
+                body: JSON.stringify(payload), // Convert payload to JSON string
             });
 
             if (response.ok) {
+                // If successful, navigate to the home page
                 navigate('/');
             } else {
+                // If response is not OK, handle errors
                 const errorData = await response.json();
-                setSubmissionError(errorData.message || 'Registration failed');
+
+                // Log error details for debugging
+                console.error("API Error:", errorData);
+
+                // Handle specific errors or show a generic message
+                setSubmissionError(errorData?.message || errorData?.detail || 'Registration failed');
             }
         } catch (error) {
-            setSubmissionError('Something went wrong');
+            // Log unexpected errors
+            console.error("Unexpected Error:", error);
+
+            // Set a user-friendly error message
+            setSubmissionError('Something went wrong. Please try again later.');
         } finally {
+            // Stop loading indicator
             setIsSubmitting(false);
         }
     };
+
 
     const handleNext = () => setStep((prev) => prev + 1);
     const handlePrevious = () => setStep((prev) => prev - 1);

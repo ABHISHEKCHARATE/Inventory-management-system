@@ -249,16 +249,66 @@ SIMPLE_JWT = {
 
 AUTH_USER_MODEL = 'Inventory_app.RegularUser'  
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'Invent_Management_System',
+#         'USER': 'postgres',
+#         'PASSWORD': '123',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }from dotenv import load_dotenv
+import os
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from the .env file
+load_dotenv(dotenv_path=os.path.join(BASE_DIR, '.env'))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Invent_Management_System',
-        'USER': 'postgres',
-        'PASSWORD': '123',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME', 'Invent_Management_System'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', '123'),
+        'HOST': os.getenv('DB_HOST', 'db'),  # Use 'db' here, as that's the service name in Docker Compose
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
+
+
+# Load the .env file from the project root directory
+load_dotenv(dotenv_path=os.path.join(BASE_DIR, '.env'))
+
+# Now you can use os.getenv to get values from the .env file
+
+
+load_dotenv()  # Load the .env file
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',  # PostgreSQL engine
+        'NAME': os.getenv('DB_NAME', 'Invent_Management_System'),  # DB_NAME from .env file
+        'USER': os.getenv('DB_USER', 'postgres'),  # DB_USER from .env file
+        'PASSWORD': os.getenv('DB_PASSWORD', '123'),  # DB_PASSWORD from .env file
+        'HOST': os.getenv('DB_HOST', 'postgres-db'),  # DB_HOST from .env file (service name in docker-compose)
+        'PORT': os.getenv('DB_PORT', '5432'),  # DB_PORT from .env file
+    }
+}
+
+
+
+
+
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',  # Django's static directory
+    BASE_DIR / 'inventory-frontend/build/static',  # React's build/static folder
+]
+
+
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
@@ -274,10 +324,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',  
-    # BASE_DIR / 'frontend/build/static', 
-]
+# STATICFILES_DIRS = [
+#     BASE_DIR / 'static',  
+#     # BASE_DIR / 'frontend/build/static', 
+# ]
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -288,7 +338,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'inventory-frontend/build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -300,6 +350,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'Inventory_Management_System.wsgi.application'
 
